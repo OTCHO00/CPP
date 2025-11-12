@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
-#include <iostream>
-
+#include "utils.h" 
+#include <SFML/Graphics.hpp>
 
 struct Segment {
 
@@ -43,5 +43,5 @@ class Snake {
 
         bool get_is_alive() const;   
 
-        void draw() const;
+        void draw(sf::RenderWindow& window);
 };

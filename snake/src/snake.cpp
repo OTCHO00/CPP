@@ -1,13 +1,14 @@
 #include "snake.h"
-#include "util.h"
+#include "utils.h"
 #include <vector>
+#include <SFML/Graphics.hpp>
 
 Snake::Snake() {
 
     current_direction = RIGHT;
     Segment head;
-    head.x = 5;
-    head.y = 5;
+    head.x = GRID_WIDTH / 2;
+    head.y = GRID_HEIGHT / 2;
     is_alive = true;
     snake_body.push_back(head);
 }
@@ -87,7 +88,7 @@ bool Snake::check_food_collision(const Segment& food_pos) const {
 
 bool Snake::check_wall_collision() const {
 
-    return (snake_body.front().x < 0 || snake_body.front().x >= LARGEUR || snake_body.front().y < 0 || snake_body.front().y >= HAUTEUR);
+    return (snake_body.front().x < 0 || snake_body.front().x >= GRID_WIDTH || snake_body.front().y < 0 || snake_body.front().y >= GRID_HEIGHT);
 
 }
 
@@ -101,7 +102,7 @@ bool Snake::check_self_collision() const {
 
         }  
 
-    }
+    }   
 
     return false;  
 
@@ -116,6 +117,21 @@ void Snake::update() {
     if (check_self_collision() || check_wall_collision()) {
 
         is_alive = false;
+
+    }
+
+}
+
+void Snake::draw(sf::RenderWindow& window) {
+
+    const float cell_size = static_cast<float>(CELL_SIZE);
+
+    for (const auto& segment : snake_body) {
+
+        sf::RectangleShape carre(sf::Vector2f(cell_size, cell_size));
+        carre.setPosition(sf::Vector2f(segment.x * cell_size, segment.y * cell_size));
+        carre.setFillColor(sf::Color::Green);
+        window.draw(carre);
 
     }
 

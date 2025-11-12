@@ -1,8 +1,11 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-constexpr int HAUTEUR = 500;
-constexpr int LARGEUR = 400;
-constexpr int UPDATE_STEP = 0.5;
+constexpr int CELL_SIZE = 20;
+constexpr int GRID_WIDTH = 40;
+constexpr int GRID_HEIGHT = 30;
+constexpr int WINDOW_WIDTH = GRID_WIDTH * CELL_SIZE;
+constexpr int WINDOW_HEIGHT = GRID_HEIGHT * CELL_SIZE;
+constexpr unsigned int FRAMERATE_LIMIT = 10;
 
 #endif
