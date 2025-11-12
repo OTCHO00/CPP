@@ -1,0 +1,356 @@
+================================================================================
+                    ROADMAP D'APPRENTISSAGE - PROJET SNAKE C++
+================================================================================
+
+Cette roadmap t'explique ce que tu dois comprendre et apprendre pour chaque 
+fichier. Pas de code à copier-coller, juste des concepts à maîtriser !
+
+================================================================================
+1. FICHIER: utils.h
+================================================================================
+
+CONCEPTS À COMPRENDRE:
+---------------------
+- #ifndef / #define / #endif : Ce sont des "include guards" (garde d'inclusion)
+  → Pourquoi c'est important ? Ça évite d'inclure le même fichier plusieurs fois
+  → Alternative moderne : #pragma once (plus simple, mais moins portable)
+  
+- constexpr : Constante évaluée à la compilation
+  → Différence avec const ? constexpr = valeur connue à la compilation
+  → Pourquoi utiliser constexpr ici ? Performance et sécurité de type
+  
+- Namespace : Organisation du code
+  → Tu pourrais mettre tes constantes dans un namespace (ex: namespace Config)
+  → Pourquoi ? Évite les conflits de noms avec d'autres bibliothèques
+
+CHOSES À FAIRE:
+---------------
+1. Comprendre pourquoi on sépare les constantes dans un fichier séparé
+2. Décider si tu veux utiliser #pragma once ou #ifndef/#define
+3. Peut-être créer un namespace pour organiser tes constantes
+4. Nommer tes constantes de manière claire (WIDTH/HEIGHT plutôt que LARGEUR/HAUTEUR ?)
+
+RESSOURCES À CHERCHER:
+----------------------
+- "C++ include guards vs pragma once"
+- "C++ constexpr vs const"
+- "C++ namespace tutorial"
+
+================================================================================
+2. FICHIER: snake.h / snake.cpp
+================================================================================
+
+CONCEPTS À COMPRENDRE:
+---------------------
+- Forward declaration : Déclarer une classe sans l'inclure complètement
+  → Pourquoi ? Accélère la compilation, évite les dépendances circulaires
+  → Quand l'utiliser ? Quand tu as juste besoin de savoir qu'une classe existe
+  
+- enum class : Enumération moderne C++11
+  → Différence avec enum classique ? Plus sûr, évite les conversions implicites
+  → Pourquoi l'utiliser pour Direction ? Plus propre qu'un int ou string
+  
+- std::vector : Conteneur dynamique
+  → Différence avec array ? Taille variable
+  → Méthodes importantes : push_back(), pop_back(), front(), back(), size()
+  
+- const correctness : Marquer les méthodes qui ne modifient pas l'objet
+  → Pourquoi ? Sécurité, permet l'optimisation, meilleure API
+  → Exemple : getHead() const → cette méthode ne modifie pas le Snake
+  
+- Références (const Segment&) : Passer par référence sans copier
+  → Différence avec pointeur ? Plus sûr, syntaxe plus simple
+  → Quand utiliser & vs * ? Référence = toujours valide, pointeur = peut être null
+
+CHOSES À FAIRE:
+---------------
+1. Créer un enum class Direction avec UP, DOWN, LEFT, RIGHT
+2. Créer une structure Segment pour représenter un segment (x, y)
+3. Stocker le corps du serpent dans un std::vector<Segment>
+4. Implémenter setDirection() : changer la direction (empêcher retour en arrière)
+5. Implémenter update() : déplacer le serpent (ajouter nouvelle tête, retirer queue)
+6. Implémenter grow() : agrandir le serpent quand il mange
+7. Implémenter checkFoodCollision() : vérifier si tête == position nourriture
+8. Implémenter checkWallCollision() : vérifier si tête sort de l'écran
+9. Implémenter checkSelfCollision() : vérifier si tête touche le corps
+10. Implémenter draw() : dessiner chaque segment avec SFML
+
+QUESTIONS À TE POSER:
+---------------------
+- Comment empêcher le serpent de revenir en arrière directement ?
+- Comment calculer la nouvelle position de la tête selon la direction ?
+- Comment faire grandir le serpent ? (indice : ne pas retirer la queue)
+- Comment aligner le serpent sur une grille (multiples de CELL_SIZE) ?
+
+RESSOURCES À CHERCHER:
+----------------------
+- "C++ enum class tutorial"
+- "C++ std::vector methods"
+- "C++ const correctness"
+- "C++ references vs pointers"
+- "SFML draw rectangle tutorial"
+
+================================================================================
+3. FICHIER: food.h / food.cpp
+================================================================================
+
+CONCEPTS À COMPRENDRE:
+---------------------
+- std::random_device / std::mt19937 : Générateurs de nombres aléatoires modernes
+  → Pourquoi pas rand() ? Plus sûr, meilleure distribution, thread-safe
+  → std::random_device = source d'entropie (vraie aléa)
+  → std::mt19937 = algorithme Mersenne Twister (très bon)
+  
+- std::uniform_int_distribution : Distribution uniforme d'entiers
+  → Pourquoi ? Garantit une distribution équitable entre min et max
+  
+- static dans une fonction : Variable partagée entre tous les appels
+  → Pourquoi utiliser static pour rd et gen ? Évite de recréer le générateur
+  → Attention : static = une seule instance pour toute la durée du programme
+  
+- Alignement sur grille : S'assurer que la nourriture est alignée avec le serpent
+  → Pourquoi ? Le serpent se déplace par CELL_SIZE, la nourriture doit être alignée
+  → Comment ? Générer un nombre de cellules, puis multiplier par CELL_SIZE
+
+CHOSES À FAIRE:
+---------------
+1. Créer getters pour x et y (getX(), getY()) - marquer const
+2. Implémenter randomizePosition() : générer position aléatoire alignée sur grille
+3. Implémenter respawn() : régénérer la nourriture (appelle randomizePosition)
+4. Implémenter draw() : dessiner la nourriture avec SFML (CircleShape par exemple)
+5. S'assurer que la position est toujours un multiple de CELL_SIZE
+
+QUESTIONS À TE POSER:
+---------------------
+- Comment générer un nombre aléatoire entre 0 et N en C++ moderne ?
+- Comment s'assurer que la nourriture n'apparaît pas sur le serpent ?
+- Quelle forme utiliser pour la nourriture ? (cercle, carré, etc.)
+
+RESSOURCES À CHERCHER:
+----------------------
+- "C++11 random number generation"
+- "C++ std::uniform_int_distribution"
+- "C++ static variable in function"
+- "SFML CircleShape tutorial"
+
+================================================================================
+4. FICHIER: game.h / game.cpp
+================================================================================
+
+CONCEPTS À COMPRENDRE:
+---------------------
+- RAII (Resource Acquisition Is Initialization) : Principe fondamental C++
+  → L'idée : Acquérir les ressources dans le constructeur, libérer dans le destructeur
+  → Pourquoi ? Évite les fuites mémoire, gestion automatique
+  
+- std::unique_ptr : Pointeur intelligent qui possède l'objet
+  → Pourquoi pas new/delete ? Gestion automatique de la mémoire
+  → Quand l'objet est détruit, unique_ptr libère automatiquement la mémoire
+  → std::make_unique() : Fonction moderne pour créer un unique_ptr
+  
+- Fixed timestep : Boucle de jeu avec pas de temps fixe
+  → Pourquoi ? Physique stable, indépendant du framerate
+  → Comment ça marche ? Accumulateur de temps, update plusieurs fois si nécessaire
+  
+- Forward declarations : Déclarer Snake et Food sans les inclure dans le header
+  → Pourquoi ? Accélère la compilation, évite dépendances circulaires
+  → Dans le .cpp, tu incluras les headers complets
+  
+- delete pour constructeur de copie : Empêcher la copie d'un objet
+  → Pourquoi ? Game ne devrait pas être copiable (une seule instance)
+  → Game(const Game&) = delete; empêche la copie
+
+CHOSES À FAIRE:
+---------------
+1. Utiliser std::unique_ptr<sf::RenderWindow> au lieu de sf::Window*
+2. Utiliser std::unique_ptr<Snake> et std::unique_ptr<Food>
+3. Implémenter le constructeur : créer la fenêtre, initialiser snake et food
+4. Implémenter run() : boucle principale du jeu
+   - Calculer deltaTime avec sf::Clock
+   - Gérer les événements (handleEvents)
+   - Update avec fixed timestep (accumulateur)
+   - Rendu (render)
+5. Implémenter handleEvents() : 
+   - Détecter fermeture de fenêtre (sf::Event::Closed)
+   - Détecter touches clavier (sf::Event::KeyPressed)
+   - Changer direction du serpent selon les flèches
+6. Implémenter update() :
+   - Mettre à jour le serpent
+   - Vérifier collision avec nourriture → grandir + respawn
+   - Vérifier collisions murs/corps → game over
+7. Implémenter render() :
+   - window->clear() pour effacer l'écran
+   - Dessiner nourriture et serpent
+   - window->display() pour afficher
+
+QUESTIONS À TE POSER:
+---------------------
+- Pourquoi utiliser RenderWindow au lieu de Window ? (pour pouvoir dessiner)
+- Comment fonctionne le fixed timestep ? (accumulateur de temps)
+- Comment détecter les touches clavier avec SFML ?
+- Comment organiser la boucle de jeu ? (events → update → render)
+
+RESSOURCES À CHERCHER:
+----------------------
+- "C++ RAII principle"
+- "C++ unique_ptr tutorial"
+- "C++ smart pointers"
+- "Game loop fixed timestep"
+- "SFML event handling"
+- "SFML RenderWindow tutorial"
+
+================================================================================
+5. FICHIER: main.cpp
+================================================================================
+
+CONCEPTS À COMPRENDRE:
+---------------------
+- Point d'entrée : main() est la fonction appelée au démarrage
+  → Toujours retourne int (0 = succès, autre = erreur)
+  
+- Gestion d'erreurs : Que faire si Game() échoue ?
+  → Pour l'instant, on peut laisser simple, mais réfléchis-y
+  
+- using namespace std : À éviter dans les headers
+  → Pourquoi ? Pollue l'espace de noms global
+  → Dans main.cpp, c'est moins grave, mais pas idéal
+
+CHOSES À FAIRE:
+---------------
+1. Créer une instance de Game
+2. Appeler game.run()
+3. Retourner 0 pour indiquer succès
+4. (Optionnel) Gérer les erreurs si Game() échoue
+
+QUESTIONS À TE POSER:
+---------------------
+- Faut-il gérer les erreurs ici ? Comment ?
+- Comment compiler et lancer le programme ?
+
+RESSOURCES À CHERCHER:
+----------------------
+- "C++ main function"
+- "C++ error handling"
+
+================================================================================
+6. ARCHITECTURE GÉNÉRALE
+================================================================================
+
+PRINCIPES À COMPRENDRE:
+-----------------------
+1. SÉPARATION HEADER/IMPLÉMENTATION :
+   - .h = déclarations (interfaces)
+   - .cpp = implémentations (code)
+   - Pourquoi ? Compilation plus rapide, meilleure organisation
+
+2. ENCAPSULATION :
+   - private = membres internes, pas accessibles de l'extérieur
+   - public = interface publique, ce que les autres classes peuvent utiliser
+   - Pourquoi ? Protège les données, facilite la maintenance
+
+3. CONST CORRECTNESS :
+   - Marquer const les méthodes qui ne modifient pas l'objet
+   - Marquer const les paramètres qu'on ne modifie pas
+   - Pourquoi ? Sécurité, optimisation, meilleure API
+
+4. GESTION MÉMOIRE :
+   - Éviter new/delete manuels
+   - Utiliser smart pointers (unique_ptr, shared_ptr)
+   - Pourquoi ? Évite les fuites mémoire, plus sûr
+
+5. FORWARD DECLARATIONS :
+   - Dans les headers, déclarer sans inclure quand possible
+   - Inclure les headers complets dans les .cpp
+   - Pourquoi ? Compilation plus rapide
+
+QUESTIONS À TE POSER SUR L'ARCHITECTURE:
+----------------------------------------
+- Pourquoi séparer Game, Snake, Food en classes différentes ?
+- Comment ces classes communiquent-elles entre elles ?
+- Quelle est la responsabilité de chaque classe ?
+- Comment améliorer cette architecture ? (score, menu, etc.)
+
+================================================================================
+7. COMPILATION
+================================================================================
+
+CONCEPTS À COMPRENDRE:
+---------------------
+- Compilateur C++ : g++ ou clang++
+- Flags importants :
+  - -std=c++17 (ou c++11, c++14) : version du standard C++
+  - -Wall -Wextra : activer tous les warnings
+  - -Iinclude : indiquer où sont les headers
+  - -o : nom du fichier de sortie
+  
+- Makefile ou CMakeLists.txt : Automatiser la compilation
+  → Makefile : système classique
+  → CMake : plus moderne, cross-platform
+
+CHOSES À FAIRE:
+---------------
+1. Comprendre comment compiler manuellement :
+   g++ -std=c++17 -Iinclude src/*.cpp -o snake -lsfml-graphics -lsfml-window -lsfml-system
+
+2. (Optionnel) Créer un Makefile ou CMakeLists.txt pour automatiser
+
+RESSOURCES À CHERCHER:
+----------------------
+- "C++ compilation tutorial"
+- "Makefile tutorial"
+- "CMake tutorial"
+- "SFML compilation"
+
+================================================================================
+8. ORDRE D'APPRENTISSAGE RECOMMANDÉ
+================================================================================
+
+1. COMMENCE PAR : utils.h
+   → Simple, juste des constantes
+   → Apprends #pragma once, constexpr, namespace
+
+2. ENSUITE : food.h / food.cpp
+   → Relativement simple (juste position aléatoire)
+   → Apprends random, getters, const
+
+3. PUIS : snake.h / snake.cpp
+   → Plus complexe (logique du jeu)
+   → Apprends vector, enum class, collisions
+
+4. ENFIN : game.h / game.cpp
+   → Le plus complexe (orchestration)
+   → Apprends unique_ptr, boucle de jeu, SFML
+
+5. TERMINE : main.cpp
+   → Très simple, juste le point d'entrée
+
+================================================================================
+9. CONSEILS GÉNÉRAUX
+================================================================================
+
+- TESTE CHAQUE ÉTAPE : Ne code pas tout d'un coup, teste au fur et à mesure
+- COMPILE SOUVENT : Vérifie que ça compile après chaque changement
+- LIS LES ERREURS : Les messages d'erreur du compilateur sont tes amis
+- CHERCHE : Si tu ne comprends pas un concept, cherche sur internet
+- EXPÉRIMENTE : Modifie le code pour voir ce qui se passe
+- COMMENCE SIMPLE : Fais fonctionner une version basique, puis améliore
+
+================================================================================
+10. AMÉLIORATIONS FUTURES (après avoir fini la base)
+================================================================================
+
+- Système de score
+- Menu de démarrage
+- Game Over screen avec possibilité de recommencer
+- Vitesse qui augmente avec le score
+- Meilleur affichage (textures, animations)
+- Sons et musique
+- High score sauvegardé
+
+================================================================================
+
+BON COURAGE ! 🐍
+N'hésite pas à chercher chaque concept que tu ne comprends pas.
+L'apprentissage se fait en expérimentant et en faisant des erreurs !
+
+================================================================================
