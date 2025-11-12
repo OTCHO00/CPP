@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include <iostream>
 
 
@@ -7,19 +8,20 @@ struct Segment {
     int x, y;
 };
 
+enum Direction {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+};
 
 class Snake {
 
     private:
 
-        enum Direction {
-            UP,
-            DOWN,
-            LEFT,
-            RIGHT
-        };
-
         std::vector<Segment> snake_body;
+        Direction current_direction;
+        bool is_alive;
 
     public:
 
@@ -27,17 +29,19 @@ class Snake {
 
         void deplacement();
 
-        void set_direction();
+        void set_direction(Direction new_direction);
 
         void update();
 
         void grow();
 
-        void check_food_collision();
+        bool check_food_collision(const Segment& food_pos) const;
 
-        void check_wall_collision();
+        bool check_wall_collision() const;    
 
-        void check_self_collision();
+        bool check_self_collision() const;
+
+        bool get_is_alive() const;   
 
         void draw() const;
 };
