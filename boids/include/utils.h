@@ -2,9 +2,9 @@
 #define UTILS_H
 
 // Fenêtre
-constexpr int WINDOW_WIDTH = 600;
-constexpr int WINDOW_HEIGHT = 800;
-constexpr unsigned int FRAMERATE_LIMIT = 10;
+constexpr int WINDOW_WIDTH = 1300;
+constexpr int WINDOW_HEIGHT = 950;
+constexpr unsigned int FRAMERATE_LIMIT = 60;
 
 // Boids
 constexpr float VITESSE_INIT = 5.0;

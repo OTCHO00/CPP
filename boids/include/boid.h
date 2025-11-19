@@ -18,21 +18,17 @@ class Boid {
 
         Boid();
 
-        void edges();
-
         void update();
 
         void wraparound();
 
-        sf::Vector2f get_vitesse();
+        sf::Vector2f get_vitesse() const;
 
-        sf::Vector2f get_position();
+        sf::Vector2f get_position() const;
 
         float length(sf::Vector2f v);
 
         void set_position(sf::Vector2f);
-
-        void apply_force(sf::Vector2f force);
 
         sf::Vector2f normalize(sf::Vector2f);
 

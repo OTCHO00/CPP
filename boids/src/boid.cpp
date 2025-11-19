@@ -16,20 +16,19 @@ Boid::Boid() {
 
     angle = distrib_a(gen);
 
-    force = sf::Vector2f(0.0f, 0.0f);
     boid_position = sf::Vector2f(0.0f, 0.0f);
     boid_acceleration = sf::Vector2f(0.0f, 0.0f);
     boid_vitesse = sf::Vector2f(cos(angle) * VITESSE_INIT, sin(angle) * VITESSE_INIT);
 
 }
 
-sf::Vector2f Boid::get_position() {
+sf::Vector2f Boid::get_position() const {
 
     return boid_position;
 
 }
 
-sf::Vector2f Boid::get_vitesse() {
+sf::Vector2f Boid::get_vitesse() const {
 
     return boid_vitesse;
 
@@ -199,15 +198,17 @@ void Boid::update() {
     boid_position.x += boid_vitesse.x;
     boid_position.y += boid_vitesse.y;
     boid_acceleration = sf::Vector2f(0.0f, 0.0f);
+
+    wraparound();
     
 }
 
 void Boid::wraparound() {
 
-    if (boid_position.x > WINDOW_WIDTH) boid_position.x = 0;
+    if (boid_position.x >= WINDOW_WIDTH) boid_position.x = 0;
     else if (boid_position.x < 0) boid_position.x = WINDOW_WIDTH;
 
-    if (boid_position.y > WINDOW_HEIGHT) boid_position.y = 0;
+    if (boid_position.y >= WINDOW_HEIGHT) boid_position.y = 0;
     else if (boid_position.y < 0) boid_position.y = WINDOW_HEIGHT;
 
 }
@@ -224,8 +225,13 @@ void Boid::draw(sf::RenderWindow& window) const {
     boid.setPoint(2, sf::Vector2f(TIP_BOIDS));
 
     boid.setFillColor(sf::Color::Red);
+
+    float center_x = (TIP_BOIDS.x + BASE_BOIDS_1.x + BASE_BOIDS_2.x) / 3.0f;
+    float center_y = (TIP_BOIDS.y + BASE_BOIDS_1.y + BASE_BOIDS_2.y) / 3.0f;
+
+    boid.setOrigin(sf::Vector2f(center_x, center_y));
     boid.setPosition(boid_position);
-    boid.setRotation(angle_deg + 90.0f);
+    boid.setRotation(sf::degrees(angle_deg + 90.0f));
 
     window.draw(boid);
 
