@@ -20,6 +20,9 @@ void Flock::update() {
 
     for (auto& boid : boids) {
 
+        boid.separation(boids);
+        boid.alignement(boids);
+        boid.cohesion(boids);
         boid.update();
 
     }

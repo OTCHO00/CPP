@@ -7,7 +7,6 @@ constexpr int WINDOW_HEIGHT = 800;
 constexpr unsigned int FRAMERATE_LIMIT = 10;
 
 // Boids
-
 constexpr float VITESSE_INIT = 5.0;
 constexpr float VITESSE_MAX = 8.0;
 constexpr float VITESSE_MIN = 3.0;
@@ -23,5 +22,8 @@ constexpr float POIDS_ALIGNEMENT = 1.2;
 
 constexpr int WIDTH_BOIDS = 15;
 constexpr int HEIGHT_BOIDS = 15;
+const sf::Vector2f TIP_BOIDS(HEIGHT_BOIDS / 2, 0);
+const sf::Vector2f BASE_BOIDS_1(-HEIGHT_BOIDS / 2, -WIDTH_BOIDS / 2);
+const sf::Vector2f BASE_BOIDS_2(-HEIGHT_BOIDS / 2, WIDTH_BOIDS / 2);
 
 #endif
