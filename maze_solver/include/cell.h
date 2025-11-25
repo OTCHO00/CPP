@@ -30,8 +30,6 @@ class Cell {
         bool is_filled() const;
 
         void set_visited(bool v);
-
-        std::tuple<int, int> get_position();
         
         void set_wall(std::string direction);
 

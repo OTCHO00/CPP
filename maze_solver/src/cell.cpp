@@ -15,12 +15,6 @@ Cell::Cell(int row, int col) : row(row), col(col), filled(false), parent(-1), vi
 
 }
 
-std::tuple<int, int> Cell::get_position() {
-
-    return position;
-
-}
-
 void Cell::set_visited(bool v) {
 
     visited = v;
@@ -44,7 +38,6 @@ bool Cell::is_filled() const {
     return filled;
 
 }
-
 
 int Cell::get_col() {
 
