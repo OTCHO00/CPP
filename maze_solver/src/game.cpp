@@ -5,7 +5,7 @@
 #include "solver.h"
 #include <SFML/Graphics.hpp>
 
-Game::Game() : window(sf::VideoMode({WIDTH, HEIGHT}), "Maze"), maze(NB_LIGNES, NB_COLONNES), solver(maze), solving(true), delay(0.2) {
+Game::Game() : window(sf::VideoMode({WIDTH, HEIGHT}), "Maze"), maze(NB_LIGNES, NB_COLONNES), solver(maze), solving(true), delay(0.1) {
 
     window.setFramerateLimit(FPS);
     maze.generate_recursive_backtracking();

@@ -6,10 +6,12 @@
 Snake::Snake() {
 
     current_direction = RIGHT;
+    is_alive = true;
+
     Segment head;
     head.x = GRID_WIDTH / 2;
     head.y = GRID_HEIGHT / 2;
-    is_alive = true;
+    
     snake_body.push_back(head);
 }
 

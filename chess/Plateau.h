@@ -1,0 +1,7 @@
+class Plateau {
+
+    public:
+
+        Plateau();
+
+};

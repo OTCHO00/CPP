@@ -1,0 +1,28 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/src/core",
+                "${workspaceFolder}/src/math",
+                "${workspaceFolder}/src/physics",
+                "${workspaceFolder}/src/physics/shapes",
+                "${workspaceFolder}/src/physics/collision",
+                "${workspaceFolder}/src/render",
+                "${workspaceFolder}/include",
+                "/opt/homebrew/opt/sfml/include"
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/System/Library/Frameworks",
+                "/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang++",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-x64"
+        }
+    ],
+    "version": 4
+}
